@@ -1,0 +1,77 @@
+# ENGLISH TRANSLATION.
+# Copyright (C) 2020 peprolinbot
+# Pedro Rey(@peprolinbot) <peprolinbot@peprolinbot.com>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2020-07-10 20:40+0200\n"
+"PO-Revision-Date: 2020-7-10 9:15+0200\n"
+"Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
+"Language-Team: SPANISH <ES@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: main.py:40
+msgid ", chatId: ["
+msgstr ", chatId: ["
+
+#: main.py:40
+msgid ": First name: "
+msgstr ": First name: "
+
+#: main.py:40
+msgid "]. ChatId is in the key channel"
+msgstr "]. ChatId is in the key channel"
+
+#: main.py:40 main.py:42
+msgid ", Last name: "
+msgstr ", Last name: "
+
+#: main.py:42
+msgid ", Description: "
+msgstr ", Description: "
+
+#: main.py:42
+msgid ", First name: "
+msgstr ", First name: "
+
+#: main.py:42
+msgid ", Title: "
+msgstr ", Title: "
+
+#: main.py:42
+msgid ", Username: "
+msgstr ", Username: "
+
+#: main.py:42
+msgid ", chatId: "
+msgstr ", chatId: "
+
+#: main.py:42
+msgid ". ChatId isn't in the key channel"
+msgstr ". ChatId isn't in the key channel"
+
+#: main.py:42
+msgid ": Type: "
+msgstr ": Type: "
+
+#: main.py:47
+msgid "Hi, I'm Morfeo. Send /help to see avaliable commands"
+msgstr "Hi, I'm Morfeo. Send /help to see avaliable commands"
+
+#: main.py:51
+msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
+msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
+
+#: main.py:54
+msgid "Opening door... It'll close in 60s"
+msgstr ""
+
+#: main.py:59
+msgid "Opening, or closing ;), door..."
+msgstr ""
+
