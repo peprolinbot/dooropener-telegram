@@ -46,7 +46,7 @@ def start(update, context):
 
 def help(update, context):
     if logCommand(update.effective_chat, "/help"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de 1min desde que mandaste el comando\n/toggle - Cambia el estado de la puerta(pulsa el botón una única vez).")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de 1min desde que mandaste el comando\n/toggle - Cambia el estado de la puerta(pulsa el botón una única vez).\n/start - El comando que se ejecuta la primera vez que usas el bot.\n7help - este comando")
 def open(update, context):
     if logCommand(update.effective_chat, "/open"): 
         context.bot.sendMessage(chat_id=update.effective_chat.id, text="Abriendo puerta... Se cerrará en 50s")
