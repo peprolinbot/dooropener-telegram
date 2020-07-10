@@ -6,6 +6,9 @@ from config.language import *
 from config.gpio import *
 from time import sleep
 import gettext
+l = gettext.translation('base', localedir='locales', languages=[lang])
+l.install()
+_ = l.gettext
 """ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -36,26 +39,26 @@ def checkKey(checkForUserId, checkInchatId=keyChannelId):
 def logCommand(fromChat, cmd, destinationChatId=logChannelId):
     out = checkKey(fromChat.id)
     if out:
-        bot.sendMessage(chat_id=logChannelId, text=cmd + ": First name: "+ str(fromChat.first_name) +", Last name: " + str(fromChat.last_name) +",chatId: [" + str(fromChat.id) + "]. ChatId is in the key channel")  
+        bot.sendMessage(chat_id=logChannelId, text=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: [") + str(fromChat.id) + _("]. ChatId is in the key channel"))  
     else:
-        bot.sendMessage(chat_id=logChannelId, text=cmd + ": Type: "+ str(fromChat.type)", First name: "+ str(fromChat.first_name) +", Last name: " + str(fromChat.last_name) + ", Username: " + str(fromChat.username) + ", Title: " + str(fromChat.title) + ", Description: " + str(fromChat.description) + ", chatId: " + str(fromChat.id) + ". ChatId isn't in the key channel")
+        bot.sendMessage(chat_id=logChannelId, text=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _(". ChatId isn't in the key channel"))
     return out
 
 def start(update, context):
     if logCommand(update.effective_chat, "/start"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Hi, I'm Morfeo. Send /help to see avaliable commands")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Hi, I'm Morfeo. Send /help to see avaliable commands"))
 
 def help(update, context):
     if logCommand(update.effective_chat, "/help"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"))
 def open(update, context):
     if logCommand(update.effective_chat, "/open"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Opening door... It'll close in 50s")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Opening door... It'll close in 60s"))
         openDoor()
 
 def toggle(update, context):
     if logCommand(update.effective_chat, "/toggle"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Opening, or closing ;), door...")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Opening, or closing ;), door..."))
         doorButton()
 
 start_handler = CommandHandler('start', start)  
