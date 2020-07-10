@@ -5,6 +5,7 @@ from config.telegram import *
 from config.language import *
 from config.gpio import *
 from time import sleep
+import gettext
 """ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -42,19 +43,19 @@ def logCommand(fromChat, cmd, destinationChatId=logChannelId):
 
 def start(update, context):
     if logCommand(update.effective_chat, "/start"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Hola soy morfeo. Usa /help para ver los comandos disponibles")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Hi, I'm Morfeo. Send /help to see avaliable commands")
 
 def help(update, context):
     if logCommand(update.effective_chat, "/help"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de 1min desde que mandaste el comando\n/toggle - Cambia el estado de la puerta(pulsa el botón una única vez).\n/start - El comando que se ejecuta la primera vez que usas el bot.\n7help - este comando")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command")
 def open(update, context):
     if logCommand(update.effective_chat, "/open"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Abriendo puerta... Se cerrará en 50s")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Opening door... It'll close in 50s")
         openDoor()
 
 def toggle(update, context):
     if logCommand(update.effective_chat, "/toggle"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Abriendo, o cerrando ;), puerta...")
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="Opening, or closing ;), door...")
         doorButton()
 
 start_handler = CommandHandler('start', start)  
