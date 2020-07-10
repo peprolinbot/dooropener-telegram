@@ -9,20 +9,19 @@ import gettext
 l = gettext.translation('base', localedir='locales', languages=[lang])
 l.install()
 _ = l.gettext
-""" import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-GPIO.setup(gpioPin, GPIO.OUT) """
+GPIO.setup(gpioPin, GPIO.OUT)
 
 bot = telegram.Bot(token=token)  
 updater = Updater(bot.token, use_context=True)
 
 def doorButton():
-    print("Btn")
-"""     GPIO.output(gpioPin, GPIO.LOW)
+    GPIO.output(gpioPin, GPIO.LOW)
     sleep(0.5)
-    GPIO.output(gpioPin, GPIO.HIGH) """
+    GPIO.output(gpioPin, GPIO.HIGH)
 
 def openDoor():
     doorButton()
