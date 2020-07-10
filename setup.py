@@ -16,6 +16,7 @@ try:
         token = input("Enter the token @BotFather gave you: ")
         logChannelId = input("Id of the channel where all the events will be logged: ")
         keyChannelId = input("Id of the channel in which it's members should be able to use the bot: ")
+        lang = input("Enter the language code you want [es/eng]: ")
         while not lang in avaliableLanguages:
             lang = input("Enter the language code you want [es/eng]: ")
             print("Language not avaliable")
