@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-10 9:03+0200\n"
+"PO-Revision-Date: 2020-7-11 00:22+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
-"Language-Team: SPANISH <ES@li.org>\n"
+"Language-Team: SPANISH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,7 +53,7 @@ msgstr ", chatId: "
 
 #: main.py:42
 msgid ". ChatId isn't in the key channel"
-msgstr "El chatId no está en el canal llave"
+msgstr ". El chatId no está en el canal llave"
 
 #: main.py:42
 msgid ": Type: "
