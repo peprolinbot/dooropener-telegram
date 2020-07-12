@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-11 00:22+0200\n"
+"PO-Revision-Date: 2020-7-12 14:56+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: SPANISH\n"
 "MIME-Version: 1.0\n"
@@ -16,16 +16,16 @@ msgstr ""
 
 
 #: main.py:40
-msgid ", chatId: ["
-msgstr ", chatId: ["
+msgid ", chatId: "
+msgstr ", chatId: "
 
 #: main.py:40
 msgid ": First name: "
 msgstr ": Nombre: "
 
 #: main.py:40
-msgid "]. ChatId is in the key channel"
-msgstr "]. El chatId está en el canal llave."
+msgid ". ChatId is in the key channel"
+msgstr ". El chatId está en el canal llave."
 
 #: main.py:40 main.py:42
 msgid ", Last name: "
@@ -47,9 +47,9 @@ msgstr ", Título: "
 msgid ", Username: "
 msgstr ", Usuario: "
 
-#: main.py:42
-msgid ", chatId: "
-msgstr ", chatId: "
+#: main.py:42 #Duplicated in line 18 of this file, so commented
+#msgid ", chatId: "
+#msgstr ", chatId: "
 
 #: main.py:42
 msgid ". ChatId isn't in the key channel"
@@ -60,18 +60,30 @@ msgid ": Type: "
 msgstr ": Tipo: "
 
 #: main.py:47
+msgid "Open"
+msgstr "Abrir"
+
+#: main.py:48
+msgid "Toggle"
+msgstr "Pulsar"
+
+#: main.py:50
+msgid "What do you want to do?"
+msgstr "¿Qué quieres hacer?"
+
+#: main.py:54
 msgid "Hi, I'm Morfeo. Send /help to see avaliable commands"
 msgstr "Hola soy Morfeo. Usa /help para ver los comandos disponibles"
 
-#: main.py:51
+#: main.py:59
 msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
 msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de 1min desde que mandaste el comando(Hará lo contrario si ya está abierta)\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando"
 
-#: main.py:54
+#: main.py:62
 msgid "Opening door... It'll close in 60s"
 msgstr "Abriendo puerta... Se cerrará en 60s"
 
-#: main.py:59
+#: main.py:67
 msgid "Abriendo, o cerrando ;), puerta..."
 msgstr ""
 
