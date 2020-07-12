@@ -53,6 +53,9 @@ def sendMenu(destinationChatId):
     keyboardObj = InlineKeyboardMarkup(keyboard)
     bot.sendMessage(_("What do you want to do?"), chat_id=destinationChatId, reply_markup=keyboardObj)
 
+def sendFuckOff(destinationChatId):
+    bot.sendMessage(chat_id=destinationChatId, text=_("I said you this was a private bot, so don't use it!"))
+
 def start(update, context):
     if logCommand(update.effective_chat, "/start"):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Hi, I'm Morfeo. Send /help to see avaliable commands"))

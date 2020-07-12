@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-12 14:56+0200\n"
+"PO-Revision-Date: 2020-7-12 15:41+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: ENGLISH\n"
 "MIME-Version: 1.0\n"
@@ -14,76 +14,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
-
-#: main.py:40
 msgid ", chatId: "
 msgstr ", chatId: "
 
-#: main.py:40
 msgid ": First name: "
 msgstr ": First name: "
 
-#: main.py:40
 msgid ". ChatId is in the key channel"
 msgstr ". ChatId is in the key channel"
 
-#: main.py:40 main.py:42
 msgid ", Last name: "
 msgstr ", Last name: "
 
-#: main.py:42
 msgid ", Description: "
 msgstr ", Description: "
 
-#: main.py:42
 msgid ", First name: "
 msgstr ", First name: "
 
-#: main.py:42
 msgid ", Title: "
 msgstr ", Title: "
 
-#: main.py:42
 msgid ", Username: "
 msgstr ", Username: "
 
-#: main.py:42 #Duplicated in line 18 of this file, so commented
+#Duplicated, so commented
 #msgid ", chatId: "
 #msgstr ", chatId: "
 
-#: main.py:42
 msgid ". ChatId isn't in the key channel"
 msgstr ". ChatId isn't in the key channel"
 
-#: main.py:42
 msgid ": Type: "
 msgstr ": Type: "
 
-#: main.py:47
 msgid "Open"
 msgstr "Open"
 
-#: main.py:48
 msgid "Toggle"
 msgstr "Toggle"
 
-#: main.py:50
 msgid "What do you want to do?"
 msgstr "What do you want to do?"
 
-#: main.py:54
+msgid "I said you this was a private bot, so don't use it!"
+msgstr "I said you this was a private bot, so don't use it!"
+
 msgid "Hi, I'm Morfeo. Send /help to see avaliable commands"
 msgstr "Hi, I'm Morfeo. Send /help to see avaliable commands"
 
-#: main.py:59
 msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
 msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
 
-#: main.py:62
 msgid "Opening door... It'll close in 60s"
-msgstr ""
+msgstr "Opening door... It'll close in 60s"
 
-#: main.py:67
 msgid "Opening, or closing ;), door..."
-msgstr ""
+msgstr "Opening door... It'll close in 60s"
+
 
