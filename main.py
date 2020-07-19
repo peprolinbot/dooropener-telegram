@@ -18,6 +18,8 @@ _ = l.gettext
 import RPi.GPIO as GPIO
 from picamera import PiCamera
 
+camera = PiCamera()
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(gpioPin, GPIO.OUT)
