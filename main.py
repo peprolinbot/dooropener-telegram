@@ -16,6 +16,7 @@ l = gettext.translation('base', localedir='locales', languages=[lang])
 l.install()
 _ = l.gettext
 import RPi.GPIO as GPIO
+from picamera import PiCamera
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -35,6 +36,13 @@ def openDoor():
     sleep(waitToCloseTime)
     doorButton()
 
+def takePhoto(photoPath="doorPhoto.jpg"):
+    print("Photo")
+    camera.capture(photoPath)
+
+def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"):
+    bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
+
 def checkKey(checkForUserId, checkInchatId=keyChannelId):
     try:
         bot.get_chat_member(checkInchatId, checkForUserId)
@@ -51,8 +59,9 @@ def logCommand(fromChat, cmd, destinationChatId=logChannelId):
     return out
 
 def sendMenu(destinationChatId):
-    keyboard = [[KeyboardButton(_('Open'))],
-                [KeyboardButton(_('Toggle'))]]
+    keyboard = [[KeyboardButton(_("open"))],
+                [KeyboardButton(_("toggle"))],
+                [KeyboardButton(_("photo"))]]
     keyboardObj = ReplyKeyboardMarkup(keyboard)
     bot.sendMessage(chat_id=destinationChatId, text=_("hereYouHaveMenu"), reply_markup=keyboardObj)
 
@@ -71,7 +80,7 @@ def help(update, context):
     if logCommand(update.effective_chat, "/help"):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("helpCmdListP1") + str(waitToCloseTime) + _("helpCmdListP2"))
 
-def open(update, context):
+def openDoor(update, context):
     if logCommand(update.effective_chat, "/open"): 
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
         openDoor()
@@ -80,6 +89,11 @@ def toggle(update, context):
     if logCommand(update.effective_chat, "/toggle"): 
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
         doorButton()
+
+def photo(update, context):
+    if logCommand(update.effective_chat, "/photo"): 
+        takePhoto()
+        sendPhoto(update.effective_chat.id)
 
 def removemenu(update, context):
     if logCommand(update.effective_chat, "/removemenu"): 
@@ -91,12 +105,14 @@ def sendmenu(update, context):
 
 startHandler = CommandHandler('start', start)  
 helpHandler = CommandHandler('help', help)
-openHandler = CommandHandler('open', open)  
+openHandler = CommandHandler('open', openDoor)  
 toggleHandler = CommandHandler('toggle', toggle)
+photoHandler = CommandHandler('photo', photo)
 removemenuHandler = CommandHandler('removemenu', removemenu)
 sendmenuHandler = CommandHandler('sendmenu', sendmenu)
-btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('Open')+"$"), open)
-btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('Toggle')+"$"), toggle)
+btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openDoor)
+btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
+btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
 
 dispatcher = updater.dispatcher
 
@@ -108,9 +124,11 @@ dispatcher.add_handler(startHandler)
 dispatcher.add_handler(helpHandler)  
 dispatcher.add_handler(openHandler)  
 dispatcher.add_handler(toggleHandler)
+dispatcher.add_handler(photoHandler)
 dispatcher.add_handler(removemenuHandler)  
 dispatcher.add_handler(sendmenuHandler)    
 dispatcher.add_handler(btnOpenHandler)
 dispatcher.add_handler(btnToggleHandler)
+dispatcher.add_handler(btnPhotoHandler)
 
 updater.start_polling()

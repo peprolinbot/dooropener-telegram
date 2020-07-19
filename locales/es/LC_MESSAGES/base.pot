@@ -47,10 +47,10 @@ msgstr ". El chatId no está en el canal llave."
 msgid ": Type: "
 msgstr ": Tipo: "
 
-msgid "Open"
+msgid "open"
 msgstr "Abrir"
 
-msgid "Toggle"
+msgid "toggle"
 msgstr "Pulsar"
 
 msgid "thisIsPrivateBot"
@@ -69,7 +69,7 @@ msgid "helpCmdListP1"
 msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "
 
 msgid "helpCmdListP2"
-msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando."
+msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/photo - Saca una foto de la puerta y la manda a este chat.\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando."
 
 msgid "openingDoor"
 msgstr "Abriendo puerta... Se cerrará en "
@@ -85,3 +85,6 @@ msgstr "Ok, borrando el menu del teclado. Usa /sendmenu si lo quieres más tarde
 
 msgid "."
 msgstr "."
+
+msgid "photo"
+msgstr "Foto"
