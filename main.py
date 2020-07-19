@@ -5,6 +5,7 @@ from telegram.ext import MessageHandler
 from telegram.ext import Filters
 from telegram import KeyboardButton
 from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardRemove
 from config.telegram import *
 from config.language import *
 from config.gpio import *
@@ -55,6 +56,9 @@ def sendMenu(destinationChatId):
     keyboardObj = ReplyKeyboardMarkup(keyboard)
     bot.sendMessage(chat_id=destinationChatId, text=_("I'm giving you this beautiful menu without any additional cost, you can use it or you can go crazy and use commands; you decide."), reply_markup=keyboardObj)
 
+def rmMenu(destinationChatId):
+    bot.sendMessage(chat_id=destinationChatId, text=_("Ok, removing the keyboard menu. Use /sendmenu if you want it again"), reply_markup=ReplyKeyboardRemove())
+
 def sendFuckOff(destinationChatId):
     bot.sendMessage(chat_id=destinationChatId, text=_("I said you this was a private bot, so don't use it!"))
 
@@ -65,7 +69,7 @@ def start(update, context):
 
 def help(update, context):
     if logCommand(update.effective_chat, "/help"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after ") + str(waitToCloseTime) + _("seconds since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"))
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after ") + str(waitToCloseTime) + _(" seconds since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed\n/start - The command executed the first time you use the bot.\n/help - This command"))
 
 def open(update, context):
     if logCommand(update.effective_chat, "/open"): 
@@ -77,10 +81,20 @@ def toggle(update, context):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Opening, or closing ;), door..."))
         doorButton()
 
+def removemenu(update, context):
+    if logCommand(update.effective_chat, "/removemenu"): 
+        rmMenu(update.effective_chat.id)
+
+def sendmenu(update, context):
+    if logCommand(update.effective_chat, "/sendmenu"): 
+        sendMenu(update.effective_chat.id)
+
 startHandler = CommandHandler('start', start)  
 helpHandler = CommandHandler('help', help)
 openHandler = CommandHandler('open', open)  
 toggleHandler = CommandHandler('toggle', toggle)
+removemenuHandler = CommandHandler('removemenu', removemenu)
+sendmenuHandler = CommandHandler('sendmenu', sendmenu)
 btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('Open')+"$"), open)
 btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('Toggle')+"$"), toggle)
 
@@ -93,7 +107,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 dispatcher.add_handler(startHandler)
 dispatcher.add_handler(helpHandler)  
 dispatcher.add_handler(openHandler)  
-dispatcher.add_handler(toggleHandler)  
+dispatcher.add_handler(toggleHandler)
+dispatcher.add_handler(removemenuHandler)  
+dispatcher.add_handler(sendmenuHandler)    
 dispatcher.add_handler(btnOpenHandler)
 dispatcher.add_handler(btnToggleHandler)
 

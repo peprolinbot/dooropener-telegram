@@ -62,8 +62,11 @@ msgstr "Aquí te dejo este maravilloso menú sin ningún coste adicional, puedes
 msgid "Hi, I'm Morfeo. Send /help to see avaliable commands"
 msgstr "Hola soy Morfeo. Usa /help para ver los comandos disponibles"
 
-msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"
-msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de 1min desde que mandaste el comando(Hará lo contrario si ya está abierta)\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando"
+msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after "
+msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "
+
+msgid " seconds since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed\n/start - The command executed the first time you use the bot.\n/help - This command"
+msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta)\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando"
 
 msgid "Opening door... It'll close in "
 msgstr "Abriendo puerta... Se cerrará en "
@@ -73,3 +76,6 @@ msgstr "Abriendo, o cerrando ;), puerta..."
 
 msgid " seconds"
 msgstr "s"
+
+msgid "Ok, removing the keyboard menu. Use /sendmenu if you want it again"
+msgstr "Ok, borrando el menu del teclado. Usa /sendmenu si lo quieres más tarde"
