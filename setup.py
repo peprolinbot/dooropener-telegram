@@ -13,6 +13,7 @@ else:
 try:
     while not approved:
         token = input("Enter the token @BotFather gave you: ")
+        botName = input("Enter a name for your bot: ")
         logChannelId = input("Id of the channel where all the events will be logged: ")
         keyChannelId = input("Id of the channel in which it's members should be able to use the bot: ")
         lang = input("Enter the language code you want [es/eng]: ")
@@ -70,6 +71,7 @@ try:
         waitToCloseTime = str(waitToCloseTime)
         print("Ok. Check if this information is ok:")
         print("Token: [" + token + "]")
+        print("Bot name: [" + botName + "]")
         print("Log channel id: [" + logChannelId + "]")
         print("Key channel id: [" + keyChannelId + "]")
         print("Language: [" + lang + "]")
@@ -96,7 +98,7 @@ try:
         f.write('#Number of the gpio where the relay is connected.\ngpioPin = '+ gpioPin)
         f.close()
     with open("config/variables.py", "w") as f:
-        f.write('#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime)
+        f.write('#The name of your bot. It\'ll be used for presenting itself\nbotName = ' + botName + '\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime)
         f.close()
     print("[i] Succesfull!")
     print("[i] Keep in mind that all this variables can be changed whenever you want at config/telegram.py and config/language.py.")

@@ -64,7 +64,7 @@ def sendFuckOff(destinationChatId):
 
 def start(update, context):
     if logCommand(update.effective_chat, "/start"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello"))
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello") + botName + _("useHelp"))
         sendMenu(update.effective_chat.id)
 
 def help(update, context):

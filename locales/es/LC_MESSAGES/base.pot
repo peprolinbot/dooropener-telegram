@@ -60,7 +60,10 @@ msgid "hereYouHaveMenu"
 msgstr "Aquí te dejo este maravilloso menú sin ningún coste adicional, puedes usarlo o ir a lo loco y usar los comandos; tú decides."
 
 msgid "hello"
-msgstr "Hola, soy Morfeo. Usa /help para ver los comandos disponibles."
+msgstr "Hola, soy "
+
+msgid "useHelp"
+msgstr ". Usa /help para ver los comandos disponibles."
 
 msgid "helpCmdListP1"
 msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "

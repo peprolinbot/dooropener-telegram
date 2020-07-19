@@ -61,7 +61,10 @@ msgid "thisIsPrivateBot"
 msgstr "I said you this was a private bot, so don't use it!"
 
 msgid "hello"
-msgstr "Hi, I'm Morfeo. Send /help to see avaliable commands."
+msgstr "Hi, I'm "
+
+msgid "useHelp"
+msgstr ". Send /help to see avaliable commands."
 
 msgid "helpCmdListP1"
 msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after "
