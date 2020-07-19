@@ -39,7 +39,7 @@ def openDoor():
     doorButton()
 
 def takePhoto(photoPath="doorPhoto.jpg"):
-    print("Photo")
+    # print("Photo")
     camera.capture(photoPath)
 
 def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"):
