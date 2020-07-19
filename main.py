@@ -8,6 +8,7 @@ from telegram import ReplyKeyboardMarkup
 from config.telegram import *
 from config.language import *
 from config.gpio import *
+from config.variables import *
 from time import sleep
 import gettext
 l = gettext.translation('base', localedir='locales', languages=[lang])
@@ -25,12 +26,12 @@ updater = Updater(bot.token, use_context=True)
 def doorButton():
     # print("Btn")
     GPIO.output(gpioPin, GPIO.LOW)
-    sleep(0.5)
+    sleep(btnPressTime)
     GPIO.output(gpioPin, GPIO.HIGH)
 
 def openDoor():
     doorButton()
-    sleep(60)
+    sleep(waitToCloseTime)
     doorButton()
 
 def checkKey(checkForUserId, checkInchatId=keyChannelId):
@@ -64,11 +65,11 @@ def start(update, context):
 
 def help(update, context):
     if logCommand(update.effective_chat, "/help"):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after 1 minute since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"))
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after ") + str(waitToCloseTime) + _("seconds since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/start - The command executed the first time you use the bot.\n/help - this command"))
 
 def open(update, context):
     if logCommand(update.effective_chat, "/open"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Opening door... It'll close in 60s"))
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("Opening door... It'll close in ") + str(waitToCloseTime) + _(" seconds"))
         openDoor()
 
 def toggle(update, context):
