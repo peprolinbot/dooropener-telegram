@@ -1,4 +1,4 @@
-echo "[i] Initialized\n"
+echo "[i] Initialized"
 echo "[i] Building spanish traductions..."
 cd locales/es/LC_MESSAGES/
 msgfmt -o base.mo base

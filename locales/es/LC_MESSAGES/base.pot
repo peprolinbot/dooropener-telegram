@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-12 14:42+0200\n"
+"PO-Revision-Date: 2020-7-19 15:35+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: SPANISH\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ", chatId: "
 msgid ": First name: "
 msgstr ": Nombre: "
 
-msgid ". ChatId is in the key channel"
+msgid "chatIdInChannel"
 msgstr ". El chatId está en el canal llave."
 
 msgid ", Last name: "
@@ -41,8 +41,8 @@ msgstr ", Usuario: "
 #msgid ", chatId: "
 #msgstr ", chatId: "
 
-msgid ". ChatId isn't in the key channel"
-msgstr ". El chatId no está en el canal llave"
+msgid "chatIdNotInChannel"
+msgstr ". El chatId no está en el canal llave."
 
 msgid ": Type: "
 msgstr ": Tipo: "
@@ -53,29 +53,32 @@ msgstr "Abrir"
 msgid "Toggle"
 msgstr "Pulsar"
 
-msgid "I said you this was a private bot, so don't use it!"
+msgid "thisIsPrivateBot"
 msgstr "¡Te dije que este era un bot privado, así que no lo uses!"
 
-msgid "I'm giving you this beautiful menu without any additional cost, you can use it or you can go crazy and use commands; you decide."
+msgid "hereYouHaveMenu"
 msgstr "Aquí te dejo este maravilloso menú sin ningún coste adicional, puedes usarlo o ir a lo loco y usar los comandos; tú decides."
 
-msgid "Hi, I'm Morfeo. Send /help to see avaliable commands"
-msgstr "Hola soy Morfeo. Usa /help para ver los comandos disponibles"
+msgid "hello"
+msgstr "Hola, soy Morfeo. Usa /help para ver los comandos disponibles."
 
-msgid "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after "
+msgid "helpCmdListP1"
 msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "
 
-msgid " seconds since you sent the command(It'll do the opposite thing if it's already open)\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed\n/start - The command executed the first time you use the bot.\n/help - This command"
-msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta)\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando"
+msgid "helpCmdListP2"
+msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando."
 
-msgid "Opening door... It'll close in "
+msgid "openingDoor"
 msgstr "Abriendo puerta... Se cerrará en "
 
-msgid "Opening, or closing ;), door..."
+msgid "togglingDoor"
 msgstr "Abriendo, o cerrando ;), puerta..."
 
-msgid " seconds"
+msgid "seconds"
 msgstr "s"
 
-msgid "Ok, removing the keyboard menu. Use /sendmenu if you want it again"
-msgstr "Ok, borrando el menu del teclado. Usa /sendmenu si lo quieres más tarde"
+msgid "removingMenu"
+msgstr "Ok, borrando el menu del teclado. Usa /sendmenu si lo quieres más tarde."
+
+msgid "."
+msgstr "."
