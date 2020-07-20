@@ -11,10 +11,16 @@ from config.language import *
 from config.gpio import *
 from config.variables import *
 from time import sleep
+from pydub import AudioSegment
+
 import gettext
 l = gettext.translation('base', localedir='locales', languages=[lang])
 l.install()
 _ = l.gettext
+
+import pygame
+pygame.init()
+
 import RPi.GPIO as GPIO
 from picamera import PiCamera
 
@@ -38,6 +44,13 @@ def openDoor():
     sleep(waitToCloseTime)
     doorButton()
 
+def playFile(file_path):
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.set_volume(0.7) 
+    pygame.mixer.music.play()
+    pygame.event.wait()
+    print("Playing: " + file_path)
+
 def takePhoto(photoPath="doorPhoto.jpg"):
     # print("Photo")
     camera.capture(photoPath)
@@ -53,11 +66,14 @@ def checkKey(checkForUserId, checkInchatId=keyChannelId):
     return True
 
 def logCommand(fromChat, cmd, destinationChatId=logChannelId):
+    if not cmd == "/photo":
+        takePhoto()
+    sendPhoto(destinationChatId)
     out = checkKey(fromChat.id)
     if out:
-        bot.sendMessage(chat_id=logChannelId, text=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
+        bot.sendMessage(chat_id=destinationChatId, text=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
     else:
-        bot.sendMessage(chat_id=logChannelId, text=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
+        bot.sendMessage(chat_id=destinationChatId, text=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
     return out
 
 def sendMenu(destinationChatId):
@@ -105,6 +121,13 @@ def sendmenu(update, context):
     if logCommand(update.effective_chat, "/sendmenu"): 
         sendMenu(update.effective_chat.id)
 
+def talk(update, context):
+    if logCommand(update.effective_chat, "Voice Note"):
+        update.message.voice.get_file().download(custom_path="voice.mp3")
+        sound = AudioSegment.from_file("voice.mp3")
+        sound.export("voice.ogg", format="ogg") 
+        playFile("voice.ogg")
+
 startHandler = CommandHandler('start', start)  
 helpHandler = CommandHandler('help', help)
 openHandler = CommandHandler('open', openDoor)  
@@ -115,6 +138,7 @@ sendmenuHandler = CommandHandler('sendmenu', sendmenu)
 btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openDoor)
 btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
 btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
+voiceNoteHandler = MessageHandler(Filters.voice, talk)
 
 dispatcher = updater.dispatcher
 
@@ -132,5 +156,6 @@ dispatcher.add_handler(sendmenuHandler)
 dispatcher.add_handler(btnOpenHandler)
 dispatcher.add_handler(btnToggleHandler)
 dispatcher.add_handler(btnPhotoHandler)
+dispatcher.add_handler(voiceNoteHandler)
 
 updater.start_polling()

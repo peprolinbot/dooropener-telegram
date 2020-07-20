@@ -143,3 +143,8 @@ config/
 
 #For avoiding the door pictures
 doorPhoto.jpg
+
+#For avoiding the voice notes
+
+voice.mp3
+voice.ogg
