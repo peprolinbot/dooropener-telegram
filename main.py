@@ -101,7 +101,7 @@ def help(update, context): #Help command. Tells what does each command
     if logCommand(update.effective_chat, "/help"):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("helpCmdListP1") + str(waitToCloseTime) + _("helpCmdListP2"))
 
-def openDoor(update, context): #Open command. Opens the door and closes after specified time
+def openCmd(update, context): #Open command. Opens the door and closes after specified time
     if logCommand(update.effective_chat, "/open"): 
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
         openDoor()
@@ -134,12 +134,12 @@ def talk(update, context): #Executed when someone sends a Voice Note. Plays the 
 #Defining handlers
 startHandler = CommandHandler('start', start)  
 helpHandler = CommandHandler('help', help)
-openHandler = CommandHandler('open', openDoor)  
+openHandler = CommandHandler('open', openCmd)  
 toggleHandler = CommandHandler('toggle', toggle)
 photoHandler = CommandHandler('photo', photo)
 removemenuHandler = CommandHandler('removemenu', removemenu)
 sendmenuHandler = CommandHandler('sendmenu', sendmenu)
-btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openDoor)
+btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openCmd)
 btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
 btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
 voiceNoteHandler = MessageHandler(Filters.voice, talk)
