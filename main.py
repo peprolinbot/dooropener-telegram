@@ -72,12 +72,11 @@ def checkKey(checkForUserId, checkInchatId=keyChannelId): #Checks if specified c
 def logCommand(fromChat, cmd, destinationChatId=logChannelId): #Logs to the log channel the cmd argument and the details of the fromChat
     if not cmd == "/photo":
         takePhoto()
-    sendPhoto(destinationChatId)
     out = checkKey(fromChat.id)
     if out:
-        bot.sendMessage(chat_id=destinationChatId, text=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
+        bot.send_photo(chat_id=destinationChatId, photo = "doorPhoto.jpg", caption=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
     else:
-        bot.sendMessage(chat_id=destinationChatId, text=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
+        bot.send_photo(chat_id=destinationChatId, photo = "doorPhoto.jpg", caption=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
     return out
 
 def sendMenu(destinationChatId): #Sends an in-keyboard menu to the specified destinationChatId
