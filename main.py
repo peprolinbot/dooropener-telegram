@@ -32,6 +32,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(gpioPin, GPIO.OUT)
+GPIO.output(gpioPin, GPIO.HIGH)
 
 #Sets up the telegram bot
 bot = telegram.Bot(token=token)  
