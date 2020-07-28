@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-21 17:39+0200\n"
+"PO-Revision-Date: 2020-7-29 1:11+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: SPANISH\n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgid "helpCmdListP1"
 msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "
 
 msgid "helpCmdListP2"
-msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/photo - Saca una foto de la puerta y la manda a este chat.\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando."
+msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/photo - Saca una foto de la puerta y la manda a este chat.\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando.\n/info - Te habla sobre el bot."
 
 msgid "openingDoor"
 msgstr "Abriendo puerta... Se cerrará en "
@@ -94,3 +94,9 @@ msgstr "nota de voz"
 
 msgid "doorAlreadyOpening"
 msgstr "La puerta ya se está abriendo, espera a que se cierre antes de intentar abrirla otra vez"
+
+msgid "botInfo"
+msgstr "Este bot ha sido progaramado por @peprolinbot y su código fuente, que es open-source, está disponible en https://github.com/peprolinbot/dooropener-telegram. Puedes contribuir al bot si quieres, o hacer lo que te plazca con el código, tiene licencia GPL-V3."
+
+msgid "anywaysCheckThisInfo"
+msgstr "De todas maneras mira esta iformación sobre el bot."

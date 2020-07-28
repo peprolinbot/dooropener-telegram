@@ -101,7 +101,7 @@ try:
         f.write('#Number of the gpio where the relay is connected.\ngpioPin = '+ gpioPin)
         f.close()
     with open("config/variables.py", "w") as f:
-        f.write('#The name of your bot. It\'ll be used for presenting itself\nbotName = ' + botName + '\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime + '\n#Path where the lockFile should be created and checked for existance. Be sure to have the neccesary permissions.\nlockFilePath = "' + lockFilePath + '"')
+        f.write('#The name of your bot. It\'ll be used for presenting itself\nbotName = "' + botName + '"\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime + '\n#Path where the lockFile should be created and checked for existance. Be sure to have the neccesary permissions.\nlockFilePath = "' + lockFilePath + '"')
         f.close()
     print("[i] Succesfull!")
     print("[i] Keep in mind that all this variables can be changed whenever you want at config/telegram.py and config/language.py.")

@@ -25,16 +25,16 @@ _ = l.gettext
 import pygame
 pygame.init()
 
-# #Sets up piCamera
-# from picamera import PiCamera
-# camera = PiCamera()
+#Sets up piCamera
+from picamera import PiCamera
+camera = PiCamera()
 
-# #Sets up gpio
-# import RPi.GPIO as GPIO
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setwarnings(False)
-# GPIO.setup(gpioPin, GPIO.OUT)
-# GPIO.output(gpioPin, GPIO.HIGH)
+#Sets up gpio
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(gpioPin, GPIO.OUT)
+GPIO.output(gpioPin, GPIO.HIGH)
 
 #Removes the lockFile in case it already existed
 if os.path.isfile(lockFilePath):
@@ -45,10 +45,10 @@ bot = telegram.Bot(token=token)
 updater = Updater(bot.token, use_context=True)
 
 def doorButton(): #Presses the door button
-    print("Btn")
-    # GPIO.output(gpioPin, GPIO.LOW)
-    # sleep(btnPressTime)
-    # GPIO.output(gpioPin, GPIO.HIGH)
+    # print("Btn")
+    GPIO.output(gpioPin, GPIO.LOW)
+    sleep(btnPressTime)
+    GPIO.output(gpioPin, GPIO.HIGH)
 
 def doorButtonWithLocking(): #Presses the door button and locks and unlocks at start and end, respectively, the lockFile
     if not os.path.isfile(lockFilePath):
@@ -83,8 +83,8 @@ def checkLockFile(path=lockFilePath): #Checks if the lock file exists
         return False
 
 def takePhoto(photoPath="doorPhoto.jpg"): #Takes a photo to the specified path
-    print("Photo")
-    # camera.capture(photoPath)
+    # print("Photo")
+    camera.capture(photoPath)
 
 def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
     bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
@@ -118,6 +118,9 @@ def rmMenu(destinationChatId): #Removes the in-keyboard menu if existing in spec
 
 def sendFuckOff(destinationChatId): #Sends a message saying you shouldn't use this bot to the specified destinationChatId
     bot.sendMessage(chat_id=destinationChatId, text=_("thisIsPrivateBot"))
+
+def sendInfo(destinationChatId): #Send info about the bot and it's source-code
+    bot.sendMessage(chat_id=destinationChatId, text=_("botInfo"))
 
 def start(update, context): #Start command. Presents itself and sends an in-keyboard menu
     if logCommand(update.effective_chat, update.message.text):
@@ -164,18 +167,30 @@ def talk(update, context): #Executed when someone sends a Voice Note. Plays the 
         sound.export("voice.ogg", format="ogg") 
         playFile("voice.ogg")
 
+def info(update, context): #/info command
+    if logCommand(update.effective_chat, update.message.text):
+        sendInfo(update.effective_chat.id)
+
+def checkAndSendFuckOffAndInfo(update, context): #Executed with any message. Checks if sender is allowed and else sends the this is private bot text and the info text
+    if not logCommand(update.effective_chat, update.message.text):
+        sendFuckOff(update.effective_chat.id)
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("anywaysCheckThisInfo"))
+        sendInfo(update.effective_chat.id)
+
 #Defining handlers
 startHandler = CommandHandler('start', start)  
 helpHandler = CommandHandler('help', help)
 openHandler = CommandHandler('open', openCmd)  
 toggleHandler = CommandHandler('toggle', toggle)
 photoHandler = CommandHandler('photo', photo)
+infoHandler = CommandHandler('info', info)
 removemenuHandler = CommandHandler('removemenu', removemenu)
 sendmenuHandler = CommandHandler('sendmenu', sendmenu)
 btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openCmd)
 btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
 btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
 voiceNoteHandler = MessageHandler(Filters.voice, talk)
+allMsgHandler = MessageHandler(Filters.all, checkAndSendFuckOffAndInfo)
 
 dispatcher = updater.dispatcher
 
@@ -189,11 +204,13 @@ dispatcher.add_handler(helpHandler)
 dispatcher.add_handler(openHandler)  
 dispatcher.add_handler(toggleHandler)
 dispatcher.add_handler(photoHandler)
+dispatcher.add_handler(infoHandler)
 dispatcher.add_handler(removemenuHandler)  
 dispatcher.add_handler(sendmenuHandler)    
 dispatcher.add_handler(btnOpenHandler)
 dispatcher.add_handler(btnToggleHandler)
 dispatcher.add_handler(btnPhotoHandler)
 dispatcher.add_handler(voiceNoteHandler)
+dispatcher.add_handler(allMsgHandler)
 
 updater.start_polling()

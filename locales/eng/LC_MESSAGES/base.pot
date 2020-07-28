@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-7-29 00:19+0200\n"
+"PO-Revision-Date: 2020-7-29 1:11+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: ENGLISH\n"
 "MIME-Version: 1.0\n"
@@ -70,7 +70,7 @@ msgid "helpCmdListP1"
 msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after "
 
 msgid "helpCmdListP2"
-msgstr " seconds since you sent the command(It'll do the opposite thing if it's already open).\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/photo - Takes a photo of the door and uploads it to this chat.\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed.\n/start - The command executed the first time you use the bot.\n/help - This command."
+msgstr " seconds since you sent the command(It'll do the opposite thing if it's already open).\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/photo - Takes a photo of the door and uploads it to this chat.\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed.\n/start - The command executed the first time you use the bot.\n/help - This command.\n/info - Tells you about the bot."
 
 msgid "openingDoor"
 msgstr "Opening door... It'll close in "
@@ -95,3 +95,9 @@ msgstr "Voice note"
 
 msgid "doorAlreadyOpening"
 msgstr "The door is already opening, wait for it to close before triying to open it again"
+
+msgid "botInfo"
+msgstr "This bot is made by @peprolinbot and it's code is open-source and can be found at https://github.com/peprolinbot/dooropener-telegram. You can contribute to this bot if you want or do anything with the code, it's licensed GPL-V3."
+
+msgid "anywaysCheckThisInfo"
+msgstr "Anyways check the following info about the bot:"
