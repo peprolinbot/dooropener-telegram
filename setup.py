@@ -69,6 +69,8 @@ try:
                     except:
                         pass
         waitToCloseTime = str(waitToCloseTime)
+        lockFilePath = input("Enter the path where the lockFile should be created and checked for existance. Be sure to have the neccesary permissions: ")
+
         print("Ok. Check if this information is ok:")
         print("Token: [" + token + "]")
         print("Bot name: [" + botName + "]")
@@ -78,6 +80,7 @@ try:
         print("GPIO pin: [" + gpioPin + "]")
         print("Button press time: [" + btnPressTime + "]")
         print("Wait to close time: [" + waitToCloseTime + "]")
+        print("Lock file path: [" + lockFilePath + "]")
         selection = input("Is this correct [S/n] ")
         if selection == "" or selection == "S" or selection == "s":
             approved = True
@@ -98,7 +101,7 @@ try:
         f.write('#Number of the gpio where the relay is connected.\ngpioPin = '+ gpioPin)
         f.close()
     with open("config/variables.py", "w") as f:
-        f.write('#The name of your bot. It\'ll be used for presenting itself\nbotName = ' + botName + '\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime)
+        f.write('#The name of your bot. It\'ll be used for presenting itself\nbotName = ' + botName + '\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtnPressTime = '+ btnPressTime +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwaitToCloseTime = '+ waitToCloseTime + '\n#Path where the lockFile should be created and checked for existance. Be sure to have the neccesary permissions.\nlockFilePath = "' + lockFilePath + '"')
         f.close()
     print("[i] Succesfull!")
     print("[i] Keep in mind that all this variables can be changed whenever you want at config/telegram.py and config/language.py.")

@@ -1,3 +1,5 @@
+import threading 
+import os
 import telegram
 from telegram.ext import Updater  
 from telegram.ext import CommandHandler
@@ -23,31 +25,50 @@ _ = l.gettext
 import pygame
 pygame.init()
 
-#Sets up piCamera
-from picamera import PiCamera
-camera = PiCamera()
+# #Sets up piCamera
+# from picamera import PiCamera
+# camera = PiCamera()
 
-#Sets up gpio
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(gpioPin, GPIO.OUT)
-GPIO.output(gpioPin, GPIO.HIGH)
+# #Sets up gpio
+# import RPi.GPIO as GPIO
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
+# GPIO.setup(gpioPin, GPIO.OUT)
+# GPIO.output(gpioPin, GPIO.HIGH)
+
+#Removes the lockFile in case it already existed
+if os.path.isfile(lockFilePath):
+    os.remove(lockFilePath)
 
 #Sets up the telegram bot
 bot = telegram.Bot(token=token)  
 updater = Updater(bot.token, use_context=True)
 
 def doorButton(): #Presses the door button
-    # print("Btn")
-    GPIO.output(gpioPin, GPIO.LOW)
-    sleep(btnPressTime)
-    GPIO.output(gpioPin, GPIO.HIGH)
+    print("Btn")
+    # GPIO.output(gpioPin, GPIO.LOW)
+    # sleep(btnPressTime)
+    # GPIO.output(gpioPin, GPIO.HIGH)
+
+def doorButtonWithLocking(): #Presses the door button and locks and unlocks at start and end, respectively, the lockFile
+    if not os.path.isfile(lockFilePath):
+        with open(lockFilePath, 'w') as f: 
+            pass
+        doorButton()
+        os.remove(lockFilePath)
+doorButtonWithLockingThread = threading.Thread(target=doorButtonWithLocking)
 
 def openDoor(): #Opens door and closes it after specified time
-    doorButton()
-    sleep(waitToCloseTime)
-    doorButton()
+    if not os.path.isfile(lockFilePath):
+        with open(lockFilePath, 'w') as f: 
+            pass
+
+        doorButton()
+        sleep(waitToCloseTime)
+        doorButton()
+    
+        os.remove(lockFilePath)
+openDoorThread = threading.Thread(target=openDoor)
 
 def playFile(file_path): #Plays the audio file specified
     pygame.mixer.music.load(file_path)
@@ -55,9 +76,15 @@ def playFile(file_path): #Plays the audio file specified
     pygame.mixer.music.play()
     pygame.event.wait()
 
+def checkLockFile(path=lockFilePath): #Checks if the lock file exists
+    if os.path.isfile(path):
+        return True
+    else:
+        return False
+
 def takePhoto(photoPath="doorPhoto.jpg"): #Takes a photo to the specified path
-    # print("Photo")
-    camera.capture(photoPath)
+    print("Photo")
+    # camera.capture(photoPath)
 
 def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
     bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
@@ -74,7 +101,7 @@ def logCommand(fromChat, cmd, destinationChatId=logChannelId): #Logs to the log 
         takePhoto()
     out = checkKey(fromChat.id)
     if out:
-        bot.send_photo(chat_id=destinationChatId, photo = "doorPhoto.jpg", caption=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
+        bot.send_photo(chat_id=destinationChatId, photo = open("doorPhoto.jpg", "rb"), caption=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
     else:
         bot.send_photo(chat_id=destinationChatId, photo = "doorPhoto.jpg", caption=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
     return out
@@ -93,35 +120,41 @@ def sendFuckOff(destinationChatId): #Sends a message saying you shouldn't use th
     bot.sendMessage(chat_id=destinationChatId, text=_("thisIsPrivateBot"))
 
 def start(update, context): #Start command. Presents itself and sends an in-keyboard menu
-    if logCommand(update.effective_chat, "/start"):
+    if logCommand(update.effective_chat, update.message.text):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello") + botName + _("useHelp"))
         sendMenu(update.effective_chat.id)
 
 def help(update, context): #Help command. Tells what does each command
-    if logCommand(update.effective_chat, "/help"):
+    if logCommand(update.effective_chat, update.message.text):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("helpCmdListP1") + str(waitToCloseTime) + _("helpCmdListP2"))
 
 def openCmd(update, context): #Open command. Opens the door and closes after specified time
-    if logCommand(update.effective_chat, "/open"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
-        openDoor()
+    if logCommand(update.effective_chat, update.message.text): 
+        if checkLockFile():
+            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
+        else:
+            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
+            openDoorThread.start()
 
 def toggle(update, context): #Toggle command. Presses the button of the door only one time
-    if logCommand(update.effective_chat, "/toggle"): 
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
-        doorButton()
+    if logCommand(update.effective_chat, update.message.text):
+        if checkLockFile():
+            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
+        else:      
+            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
+            doorButtonWithLockingThread.start()
 
 def photo(update, context): #Photo command. Takes a photo from the piCamera and sends it
-    if logCommand(update.effective_chat, "/photo"): 
+    if logCommand(update.effective_chat, update.message.text): 
         takePhoto()
         sendPhoto(update.effective_chat.id)
 
 def removemenu(update, context): #Removemenu command. Removes the in-keyboard menu from the sender's chatId
-    if logCommand(update.effective_chat, "/removemenu"): 
+    if logCommand(update.effective_chat, update.message.text): 
         rmMenu(update.effective_chat.id)
 
 def sendmenu(update, context): #Sendmenu command. Sends an in-keyboard menu to the sender's chatId
-    if logCommand(update.effective_chat, "/sendmenu"): 
+    if logCommand(update.effective_chat, update.message.text): 
         sendMenu(update.effective_chat.id)
 
 def talk(update, context): #Executed when someone sends a Voice Note. Plays the voice note on the speakers

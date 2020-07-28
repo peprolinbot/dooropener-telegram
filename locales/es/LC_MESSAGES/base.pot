@@ -91,3 +91,6 @@ msgstr "Foto"
 
 msgid "voiceNote"
 msgstr "nota de voz"
+
+msgid "doorAlreadyOpening"
+msgstr "La puerta ya se está abriendo, espera a que se cierre antes de intentar abrirla otra vez"
