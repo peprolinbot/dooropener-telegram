@@ -56,7 +56,7 @@ def doorButtonWithLocking(): #Presses the door button and locks and unlocks at s
             pass
         doorButton()
         os.remove(lockFilePath)
-doorButtonWithLockingThread = threading.Thread(target=doorButtonWithLocking)
+
 
 def openDoor(): #Opens door and closes it after specified time
     if not os.path.isfile(lockFilePath):
@@ -68,7 +68,6 @@ def openDoor(): #Opens door and closes it after specified time
         doorButton()
     
         os.remove(lockFilePath)
-openDoorThread = threading.Thread(target=openDoor)
 
 def playFile(file_path): #Plays the audio file specified
     pygame.mixer.music.load(file_path)
@@ -136,16 +135,19 @@ def openCmd(update, context): #Open command. Opens the door and closes after spe
         if checkLockFile():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
         else:
+            doorOpenThread = threading.Thread(target=openDoor)
+            doorOpenThread.start()
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
-            openDoorThread.start()
 
 def toggle(update, context): #Toggle command. Presses the button of the door only one time
     if logCommand(update.effective_chat, update.message.text):
         if checkLockFile():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
-        else:      
+        else:     
+            doorButtonWithLockingThread = threading.Thread(target=doorButtonWithLocking)
+            doorButtonWithLockingThread.start() 
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
-            doorButtonWithLockingThread.start()
+
 
 def photo(update, context): #Photo command. Takes a photo from the piCamera and sends it
     if logCommand(update.effective_chat, update.message.text): 
