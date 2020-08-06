@@ -71,7 +71,7 @@ def openDoor(): #Opens door and closes it after specified time
 
 def playFile(file_path): #Plays the audio file specified
     pygame.mixer.music.load(file_path)
-    pygame.mixer.music.set_volume(0.7) 
+    pygame.mixer.music.set_volume(1.0) 
     pygame.mixer.music.play()
     pygame.event.wait()
 
