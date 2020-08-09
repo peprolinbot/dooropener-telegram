@@ -14,12 +14,18 @@ from config.gpio import *
 from config.variables import *
 from time import sleep
 from pydub import AudioSegment
+from gtts import gTTS
 
 #Loads traductions
 import gettext
 l = gettext.translation('base', localedir='locales', languages=[lang])
 l.install()
 _ = l.gettext
+
+#Sets the lang of the tts
+ttsLang = lang
+if ttsLang == "eng":
+    ttsLang = "en"
 
 #Initializes pygame
 import pygame
@@ -68,12 +74,21 @@ def openDoor(): #Opens door and closes it after specified time
         doorButton()
     
         os.remove(lockFilePath)
+def generateTts(name):
+    tts = gTTS(_("welcome") + ", " + name , lang=ttsLang)
+    tts.save("tempTts.mp3")
+    sound = AudioSegment.from_file("tempTts.mp3")
+    os.remove("tempTts.mp3")
+    sound.export("audios/" + name + ".ogg", format="ogg")
 
 def playFile(file_path): #Plays the audio file specified
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.set_volume(1.0) 
-    pygame.mixer.music.play()
-    pygame.event.wait()
+    try:
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.set_volume(1.0) 
+        pygame.mixer.music.play()
+    except pygame.error: #Don't blame if the file doesn't exists, as is posible that people remove their file if they want. Also aplicable if no speaker because not wanting speaker features.
+        pass
+
 
 def checkLockFile(path=lockFilePath): #Checks if the lock file exists
     if os.path.isfile(path):
@@ -125,6 +140,8 @@ def start(update, context): #Start command. Presents itself and sends an in-keyb
     if logCommand(update.effective_chat, update.message.text):
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello") + botName + _("useHelp"))
         sendMenu(update.effective_chat.id)
+        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+        generateTts(requesterName)
 
 def help(update, context): #Help command. Tells what does each command
     if logCommand(update.effective_chat, update.message.text):
@@ -137,6 +154,8 @@ def openCmd(update, context): #Open command. Opens the door and closes after spe
         else:
             doorOpenThread = threading.Thread(target=openDoor)
             doorOpenThread.start()
+            requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+            playFile("audios/" + requesterName + ".ogg")
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
 
 def toggle(update, context): #Toggle command. Presses the button of the door only one time
@@ -146,6 +165,8 @@ def toggle(update, context): #Toggle command. Presses the button of the door onl
         else:     
             doorButtonWithLockingThread = threading.Thread(target=doorButtonWithLocking)
             doorButtonWithLockingThread.start() 
+            requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+            playFile("audios/" + requesterName + ".ogg")
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
 
 
@@ -162,12 +183,30 @@ def sendmenu(update, context): #Sendmenu command. Sends an in-keyboard menu to t
     if logCommand(update.effective_chat, update.message.text): 
         sendMenu(update.effective_chat.id)
 
+def gentts(update, context): #Gentts command. Generates the tts wlecome audio file for the user who requested it with it's name
+    if logCommand(update.effective_chat, update.message.text):
+        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+        generateTts(requesterName)
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("ttsGenerated"))
+
+def removetts(update, context): #Removetts command. Removes the welcome audio file
+    if logCommand(update.effective_chat, update.message.text):
+        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+        try:
+            os.remove("audios/" + requesterName + ".ogg")
+        except FileNotFoundError:
+            pass
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("ttsRemoved"))
+        
+
 def talk(update, context): #Executed when someone sends a Voice Note. Plays the voice note on the speakers
     if logCommand(update.effective_chat, _("voiceNote")):
         update.message.voice.get_file().download(custom_path="voice.mp3")
         sound = AudioSegment.from_file("voice.mp3")
         sound.export("voice.ogg", format="ogg") 
         playFile("voice.ogg")
+        os.remove("voice.mp3")
+        os.remove("voice.ogg")
 
 def info(update, context): #/info command
     if logCommand(update.effective_chat, update.message.text):
@@ -188,6 +227,8 @@ photoHandler = CommandHandler('photo', photo)
 infoHandler = CommandHandler('info', info)
 removemenuHandler = CommandHandler('removemenu', removemenu)
 sendmenuHandler = CommandHandler('sendmenu', sendmenu)
+genttsHandler = CommandHandler('gentts', gentts)
+removettsHandler = CommandHandler('removetts', removetts)
 btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openCmd)
 btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
 btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
@@ -208,7 +249,9 @@ dispatcher.add_handler(toggleHandler)
 dispatcher.add_handler(photoHandler)
 dispatcher.add_handler(infoHandler)
 dispatcher.add_handler(removemenuHandler)  
-dispatcher.add_handler(sendmenuHandler)    
+dispatcher.add_handler(sendmenuHandler)  
+dispatcher.add_handler(genttsHandler)
+dispatcher.add_handler(removettsHandler)
 dispatcher.add_handler(btnOpenHandler)
 dispatcher.add_handler(btnToggleHandler)
 dispatcher.add_handler(btnPhotoHandler)

@@ -148,3 +148,7 @@ doorPhoto.jpg
 
 voice.mp3
 voice.ogg
+
+#For avoiding the welcome-audios folder
+
+audios
