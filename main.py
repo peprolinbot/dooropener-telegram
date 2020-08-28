@@ -105,7 +105,9 @@ def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot spe
 
 def checkKey(checkForUserId, checkInchatId=keyChannelId): #Checks if specified chatId is in the key channel, or other channel/group specified
     try:
-        bot.get_chat_member(checkInchatId, checkForUserId)
+        user = bot.get_chat_member(checkInchatId, checkForUserId)
+        if user['status'] == 'left':
+            return False
     except:
         return False
     return True
