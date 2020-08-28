@@ -31,10 +31,12 @@ if ttsLang == "eng":
 import pygame
 pygame.init()
 
-#Sets up piCamera
-from picamera import PiCamera
-camera = PiCamera()
-
+#Tries setting up piCamera
+try:
+    from picamera import PiCamera
+    camera = PiCamera()
+except:
+    pass
 #Sets up gpio
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
@@ -98,7 +100,10 @@ def checkLockFile(path=lockFilePath): #Checks if the lock file exists
 
 def takePhoto(photoPath="doorPhoto.jpg"): #Takes a photo to the specified path
     # print("Photo")
-    camera.capture(photoPath)
+    try:
+        camera.capture(photoPath)
+    except:
+        pass
 
 def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
     bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
