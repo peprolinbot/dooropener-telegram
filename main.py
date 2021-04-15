@@ -16,6 +16,10 @@ from time import sleep
 from pydub import AudioSegment
 from gtts import gTTS
 
+#Instantiates a door
+from door import door
+mainDoor = door(gpioPin, lockFilePath, waitToCloseTime, btnPressTime)
+
 #Loads traductions
 import gettext
 l = gettext.translation('base', localedir='locales', languages=[lang])
@@ -31,19 +35,6 @@ if ttsLang == "eng":
 import pygame
 pygame.init()
 
-#Tries setting up piCamera
-try:
-    from picamera import PiCamera
-    camera = PiCamera()
-except:
-    pass
-#Sets up gpio
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(gpioPin, GPIO.OUT)
-GPIO.output(gpioPin, GPIO.HIGH)
-
 #Removes the lockFile in case it already existed
 if os.path.isfile(lockFilePath):
     os.remove(lockFilePath)
@@ -52,30 +43,6 @@ if os.path.isfile(lockFilePath):
 bot = telegram.Bot(token=token)  
 updater = Updater(bot.token, use_context=True)
 
-def doorButton(): #Presses the door button
-    # print("Btn")
-    GPIO.output(gpioPin, GPIO.LOW)
-    sleep(btnPressTime)
-    GPIO.output(gpioPin, GPIO.HIGH)
-
-def doorButtonWithLocking(): #Presses the door button and locks and unlocks at start and end, respectively, the lockFile
-    if not os.path.isfile(lockFilePath):
-        with open(lockFilePath, 'w') as f: 
-            pass
-        doorButton()
-        os.remove(lockFilePath)
-
-
-def openDoor(): #Opens door and closes it after specified time
-    if not os.path.isfile(lockFilePath):
-        with open(lockFilePath, 'w') as f: 
-            pass
-
-        doorButton()
-        sleep(waitToCloseTime)
-        doorButton()
-    
-        os.remove(lockFilePath)
 def generateTts(name):
     tts = gTTS(_("welcome") + ", " + name , lang=ttsLang)
     tts.save("tempTts.mp3")
@@ -83,27 +50,15 @@ def generateTts(name):
     os.remove("tempTts.mp3")
     sound.export("audios/" + name + ".ogg", format="ogg")
 
-def playFile(file_path): #Plays the audio file specified
-    try:
-        pygame.mixer.music.load(file_path)
-        pygame.mixer.music.set_volume(1.0) 
-        pygame.mixer.music.play()
-    except pygame.error: #Don't blame if the file doesn't exists, as is posible that people remove their file if they want. Also aplicable if no speaker because not wanting speaker features.
-        pass
-
-
 def checkLockFile(path=lockFilePath): #Checks if the lock file exists
     if os.path.isfile(path):
         return True
     else:
         return False
 
-def takePhoto(photoPath="doorPhoto.jpg"): #Takes a photo to the specified path
-    # print("Photo")
-    try:
-        camera.capture(photoPath)
-    except:
-        pass
+'''
+Starts telegram commands section
+'''
 
 def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
     bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
@@ -119,7 +74,7 @@ def checkKey(checkForUserId, checkInchatId=keyChannelId): #Checks if specified c
 
 def logCommand(fromChat, cmd, destinationChatId=logChannelId): #Logs to the log channel the cmd argument and the details of the fromChat
     if not cmd == "/photo":
-        takePhoto()
+        mainDoor.takePhoto()
     out = checkKey(fromChat.id)
     if out:
         bot.send_photo(chat_id=destinationChatId, photo = open("doorPhoto.jpg", "rb"), caption=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
@@ -159,10 +114,10 @@ def openCmd(update, context): #Open command. Opens the door and closes after spe
         if checkLockFile():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
         else:
-            doorOpenThread = threading.Thread(target=openDoor)
+            doorOpenThread = threading.Thread(target=mainDoor.open)
             doorOpenThread.start()
             requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-            playFile("audios/" + requesterName + ".ogg")
+            mainDoor.playAudioFile("audios/" + requesterName + ".ogg")
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
 
 def toggle(update, context): #Toggle command. Presses the button of the door only one time
@@ -170,16 +125,16 @@ def toggle(update, context): #Toggle command. Presses the button of the door onl
         if checkLockFile():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
         else:     
-            doorButtonWithLockingThread = threading.Thread(target=doorButtonWithLocking)
+            doorButtonWithLockingThread = threading.Thread(target=mainDoor.pressButtonWithLocking)
             doorButtonWithLockingThread.start() 
             requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-            playFile("audios/" + requesterName + ".ogg")
+            mainDoor.playAudioFile("audios/" + requesterName + ".ogg")
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
 
 
 def photo(update, context): #Photo command. Takes a photo from the piCamera and sends it
     if logCommand(update.effective_chat, update.message.text): 
-        takePhoto()
+        mainDoor.takePhoto()
         sendPhoto(update.effective_chat.id)
 
 def removemenu(update, context): #Removemenu command. Removes the in-keyboard menu from the sender's chatId
@@ -211,7 +166,7 @@ def talk(update, context): #Executed when someone sends a Voice Note. Plays the 
         update.message.voice.get_file().download(custom_path="voice.mp3")
         sound = AudioSegment.from_file("voice.mp3")
         sound.export("voice.ogg", format="ogg") 
-        playFile("voice.ogg")
+        mainDoor.playAudioFile("voice.ogg")
         os.remove("voice.mp3")
         os.remove("voice.ogg")
 
