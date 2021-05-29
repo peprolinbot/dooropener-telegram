@@ -1,0 +1,28 @@
+name: Docker multi-arch image building and publishing
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Login to Github packages
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        
+      - name: Build and publish the image
+        run: |
+          docker buildx build --push \
+            --tag ghcr.io/peprolinbot/dooropener-telegram:latest \
+            --platform linux/amd64,linux/arm64,linux/arm/v7 .
+          
