@@ -16,9 +16,11 @@ from time import sleep
 from pydub import AudioSegment
 from gtts import gTTS
 
+import telegram_helpers
+
 #Instantiates a door
-from door import door
-mainDoor = door(gpioPin, lockFilePath, waitToCloseTime, btnPressTime)
+from door import Door
+main_door = Door(gpio_pin, lock_file_path, wait_to_close_time, btn_press_time)
 
 #Loads traductions
 import gettext
@@ -27,175 +29,178 @@ l.install()
 _ = l.gettext
 
 #Sets the lang of the tts
-ttsLang = lang
-if ttsLang == "eng":
-    ttsLang = "en"
+tts_lang = lang
+if tts_lang == "eng":
+    tts_lang = "en"
 
 #Initializes pygame
 import pygame
 pygame.init()
 
 #Removes the lockFile in case it already existed
-if os.path.isfile(lockFilePath):
-    os.remove(lockFilePath)
+if os.path.isfile(lock_file_path):
+    os.remove(lock_file_path)
 
 #Sets up the telegram bot
 bot = telegram.Bot(token=token)  
 updater = Updater(bot.token, use_context=True)
 
-def generateTts(name):
-    tts = gTTS(_("welcome") + ", " + name , lang=ttsLang)
+def generate_tts(name):
+    tts = gTTS(_("welcome") + ", " + name , lang=tts_lang)
     tts.save("tempTts.mp3")
     sound = AudioSegment.from_file("tempTts.mp3")
     os.remove("tempTts.mp3")
     sound.export("audios/" + name + ".ogg", format="ogg")
 
-def checkLockFile(path=lockFilePath): #Checks if the lock file exists
+def check_lock_file(path=lock_file_path): #Checks if the lock file exists
     if os.path.isfile(path):
         return True
     else:
         return False
 
 '''
-Starts telegram commands section
+Telegram helpers
 '''
+def _send_photo(destination_chat_id, photo_path="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
+    bot.send_photo(chat_id=destination_chat_id, photo=open(photo_path, 'rb'))
 
-def sendPhoto(destinationChatId, photoPath="doorPhoto.jpg"): #Sends the phot specified to the chatId specified
-    bot.send_photo(chat_id=destinationChatId, photo=open(photoPath, 'rb'))
-
-def checkKey(checkForUserId, checkInchatId=keyChannelId): #Checks if specified chatId is in the key channel, or other channel/group specified
+def _check_key(check_for_user_id, check_in_chat_id=key_channel_id): #Checks if specified chatId is in the key channel, or other channel/group specified
     try:
-        user = bot.get_chat_member(checkInchatId, checkForUserId)
+        user = bot.get_chat_member(check_in_chat_id, check_for_user_id)
         if user['status'] == 'left':
             return False
     except:
         return False
     return True
 
-def logCommand(fromChat, cmd, destinationChatId=logChannelId): #Logs to the log channel the cmd argument and the details of the fromChat
+def _log_command(from_chat, cmd, destination_chat_id=log_channel_id): #Logs to the log channel the cmd argument and the details of the from_chat
     if not cmd == "/photo":
-        mainDoor.takePhoto()
-    out = checkKey(fromChat.id)
+        main_door.take_photo()
+    out = _check_key(from_chat.id)
     if out:
-        bot.send_photo(chat_id=destinationChatId, photo = open("doorPhoto.jpg", "rb"), caption=cmd + _(": First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) +_(", chatId: ") + str(fromChat.id) + _("chatIdInChannel"))  
+        bot.send_photo(chat_id=destination_chat_id, photo = open("doorPhoto.jpg", "rb"), caption=cmd + _(": First name: ")+ str(from_chat.first_name) +_(", Last name: ") + str(from_chat.last_name) +_(", chatId: ") + str(from_chat.id) + _("chatIdInChannel"))  
     else:
-        bot.send_photo(chat_id=destinationChatId, photo = "doorPhoto.jpg", caption=cmd + _(": Type: ")+ str(fromChat.type)+ _(", First name: ")+ str(fromChat.first_name) +_(", Last name: ") + str(fromChat.last_name) + _(", Username: ") + str(fromChat.username) + _(", Title: ") + str(fromChat.title) + _(", Description: ") + str(fromChat.description) + _(", chatId: ") + str(fromChat.id) + _("chatIdNotInChannel"))
+        bot.send_photo(chat_id=destination_chat_id, photo = "doorPhoto.jpg", caption=cmd + _(": Type: ")+ str(from_chat.type)+ _(", First name: ")+ str(from_chat.first_name) +_(", Last name: ") + str(from_chat.last_name) + _(", Username: ") + str(from_chat.username) + _(", Title: ") + str(from_chat.title) + _(", Description: ") + str(from_chat.description) + _(", chatId: ") + str(from_chat.id) + _("chatIdNotInChannel"))
     return out
 
-def sendMenu(destinationChatId): #Sends an in-keyboard menu to the specified destinationChatId
+def _send_menu(destination_chat_id): #Sends an in-keyboard menu to the specified destination_chat_id
     keyboard = [[KeyboardButton(_("open"))],
                 [KeyboardButton(_("toggle"))],
                 [KeyboardButton(_("photo"))]]
-    keyboardObj = ReplyKeyboardMarkup(keyboard)
-    bot.sendMessage(chat_id=destinationChatId, text=_("hereYouHaveMenu"), reply_markup=keyboardObj)
+    keyboard_obj = ReplyKeyboardMarkup(keyboard)
+    bot.sendMessage(chat_id=destination_chat_id, text=_("hereYouHaveMenu"), reply_markup=keyboard_obj)
 
-def rmMenu(destinationChatId): #Removes the in-keyboard menu if existing in specified destinationChatId
-    bot.sendMessage(chat_id=destinationChatId, text=_("removingMenu"), reply_markup=ReplyKeyboardRemove())
+def _remove_menu(destination_chat_id): #Removes the in-keyboard menu if existing in specified destination_chat_id
+    bot.sendMessage(chat_id=destination_chat_id, text=_("removingMenu"), reply_markup=ReplyKeyboardRemove())
 
-def sendFuckOff(destinationChatId): #Sends a message saying you shouldn't use this bot to the specified destinationChatId
-    bot.sendMessage(chat_id=destinationChatId, text=_("thisIsPrivateBot"))
+def _send_access_denied(destination_chat_id): #Sends a message saying you shouldn't use this bot to the specified destination_chat_id
+    bot.sendMessage(chat_id=destination_chat_id, text=_("thisIsPrivateBot"))
 
-def sendInfo(destinationChatId): #Send info about the bot and it's source-code
-    bot.sendMessage(chat_id=destinationChatId, text=_("botInfo"))
+def _send_info(destination_chat_id): #Send info about the bot and it's source-code
+    bot.sendMessage(chat_id=destination_chat_id, text=_("botInfo")) 
+
+'''
+Starts telegram commands section
+'''
 
 def start(update, context): #Start command. Presents itself and sends an in-keyboard menu
-    if logCommand(update.effective_chat, update.message.text):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello") + botName + _("useHelp"))
-        sendMenu(update.effective_chat.id)
-        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-        generateTts(requesterName)
+    if _log_command(update.effective_chat, update.message.text):
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("hello") + bot_name + _("useHelp"))
+        _send_menu(update.effective_chat.id)
+        requester_name =  update.effective_chat.first_name.split(' ', 1)[0]
+        generate_tts(requester_name)
 
 def help(update, context): #Help command. Tells what does each command
-    if logCommand(update.effective_chat, update.message.text):
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("helpCmdListP1") + str(waitToCloseTime) + _("helpCmdListP2"))
+    if _log_command(update.effective_chat, update.message.text):
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("helpCmdListP1") + str(wait_to_close_time) + _("helpCmdListP2"))
 
-def openCmd(update, context): #Open command. Opens the door and closes after specified time
-    if logCommand(update.effective_chat, update.message.text): 
-        if checkLockFile():
+def open_(update, context): #Open command. Opens the door and closes after specified time
+    if _log_command(update.effective_chat, update.message.text): 
+        if check_lock_file():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
         else:
-            doorOpenThread = threading.Thread(target=mainDoor.open)
-            doorOpenThread.start()
-            requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-            mainDoor.playAudioFile("audios/" + requesterName + ".ogg")
-            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(waitToCloseTime) + _("seconds") + _("."))
+            door_open_thread = threading.Thread(target=main_door.open)
+            door_open_thread.start()
+            requester_name =  update.effective_chat.first_name.split(' ', 1)[0]
+            main_door.play_audio_file("audios/" + requester_name + ".ogg")
+            context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("openingDoor") + str(wait_to_close_time) + _("seconds") + _("."))
 
 def toggle(update, context): #Toggle command. Presses the button of the door only one time
-    if logCommand(update.effective_chat, update.message.text):
-        if checkLockFile():
+    if _log_command(update.effective_chat, update.message.text):
+        if check_lock_file():
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("doorAlreadyOpening"))
         else:     
-            doorButtonWithLockingThread = threading.Thread(target=mainDoor.pressButtonWithLocking)
-            doorButtonWithLockingThread.start() 
-            requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-            mainDoor.playAudioFile("audios/" + requesterName + ".ogg")
+            door_button_with_locking_thread = threading.Thread(target=main_door.press_button_with_locking)
+            door_button_with_locking_thread.start() 
+            requester_name =  update.effective_chat.first_name.split(' ', 1)[0]
+            main_door.play_audio_file("audios/" + requester_name + ".ogg")
             context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("togglingDoor"))
 
 
 def photo(update, context): #Photo command. Takes a photo from the piCamera and sends it
-    if logCommand(update.effective_chat, update.message.text): 
-        mainDoor.takePhoto()
-        sendPhoto(update.effective_chat.id)
+    if _log_command(update.effective_chat, update.message.text): 
+        main_door.take_photo()
+        _send_photo(update.effective_chat.id)
 
-def removemenu(update, context): #Removemenu command. Removes the in-keyboard menu from the sender's chatId
-    if logCommand(update.effective_chat, update.message.text): 
-        rmMenu(update.effective_chat.id)
+def remove_menu(update, context): #removemenu command. Removes the in-keyboard menu from the sender's chatId
+    if _log_command(update.effective_chat, update.message.text): 
+        _remove_menu(update.effective_chat.id)
 
-def sendmenu(update, context): #Sendmenu command. Sends an in-keyboard menu to the sender's chatId
-    if logCommand(update.effective_chat, update.message.text): 
-        sendMenu(update.effective_chat.id)
+def send_menu(update, context): #sendmenu command. Sends an in-keyboard menu to the sender's chatId
+    if _log_command(update.effective_chat, update.message.text): 
+        _send_menu(update.effective_chat.id)
 
 def gentts(update, context): #Gentts command. Generates the tts wlecome audio file for the user who requested it with it's name
-    if logCommand(update.effective_chat, update.message.text):
-        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
-        generateTts(requesterName)
+    if _log_command(update.effective_chat, update.message.text):
+        requester_name =  update.effective_chat.first_name.split(' ', 1)[0]
+        generate_tts(requester_name)
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("ttsGenerated"))
 
 def removetts(update, context): #Removetts command. Removes the welcome audio file
-    if logCommand(update.effective_chat, update.message.text):
-        requesterName =  update.effective_chat.first_name.split(' ', 1)[0]
+    if _log_command(update.effective_chat, update.message.text):
+        requester_name =  update.effective_chat.first_name.split(' ', 1)[0]
         try:
-            os.remove("audios/" + requesterName + ".ogg")
+            os.remove("audios/" + requester_name + ".ogg")
         except FileNotFoundError:
             pass
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("ttsRemoved"))
         
 
 def talk(update, context): #Executed when someone sends a Voice Note. Plays the voice note on the speakers
-    if logCommand(update.effective_chat, _("voiceNote")):
+    if _log_command(update.effective_chat, _("voiceNote")):
         update.message.voice.get_file().download(custom_path="voice.mp3")
         sound = AudioSegment.from_file("voice.mp3")
         sound.export("voice.ogg", format="ogg") 
-        mainDoor.playAudioFile("voice.ogg")
+        main_door.play_audio_file("voice.ogg")
         os.remove("voice.mp3")
         os.remove("voice.ogg")
 
 def info(update, context): #/info command
-    if logCommand(update.effective_chat, update.message.text):
-        sendInfo(update.effective_chat.id)
+    if _log_command(update.effective_chat, update.message.text):
+        _send_info(update.effective_chat.id)
 
-def checkAndSendFuckOffAndInfo(update, context): #Executed with any message. Checks if sender is allowed and else sends the this is private bot text and the info text
-    if not logCommand(update.effective_chat, update.message.text):
-        sendFuckOff(update.effective_chat.id)
+def check_and_send_access_denied(update, context): #Executed with any message. Checks if sender is allowed and else sends the this is private bot text and the info text
+    if not _log_command(update.effective_chat, update.message.text):
+        _send_access_denied(update.effective_chat.id)
         context.bot.sendMessage(chat_id=update.effective_chat.id, text=_("anywaysCheckThisInfo"))
-        sendInfo(update.effective_chat.id)
+        _send_info(update.effective_chat.id)
 
 #Defining handlers
-startHandler = CommandHandler('start', start)  
-helpHandler = CommandHandler('help', help)
-openHandler = CommandHandler('open', openCmd)  
-toggleHandler = CommandHandler('toggle', toggle)
-photoHandler = CommandHandler('photo', photo)
-infoHandler = CommandHandler('info', info)
-removemenuHandler = CommandHandler('removemenu', removemenu)
-sendmenuHandler = CommandHandler('sendmenu', sendmenu)
-genttsHandler = CommandHandler('gentts', gentts)
-removettsHandler = CommandHandler('removetts', removetts)
-btnOpenHandler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), openCmd)
-btnToggleHandler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
-btnPhotoHandler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
-voiceNoteHandler = MessageHandler(Filters.voice, talk)
-allMsgHandler = MessageHandler(Filters.all, checkAndSendFuckOffAndInfo)
+start_handler = CommandHandler('start', start)  
+help_handler = CommandHandler('help', help)
+open_handler = CommandHandler('open', open_)  
+toggle_handler = CommandHandler('toggle', toggle)
+photo_handler = CommandHandler('photo', photo)
+info_handler = CommandHandler('info', info)
+remove_menu_handler = CommandHandler('removemenu', remove_menu)
+send_menu_handler = CommandHandler('sendmenu', send_menu)
+gentts_handler = CommandHandler('gentts', gentts)
+removetts_handler = CommandHandler('removetts', removetts)
+btn_open_handler = MessageHandler(Filters.regex(r"^"+_('open')+"$"), open_)
+btn_toggle_handler = MessageHandler(Filters.regex(r"^"+_('toggle')+"$"), toggle)
+btn_photo_handler = MessageHandler(Filters.regex(r"^"+_('photo')+"$"), photo)
+voice_note_handler = MessageHandler(Filters.voice, talk)
+all_msg_handler = MessageHandler(Filters.all, check_and_send_access_denied)
 
 dispatcher = updater.dispatcher
 
@@ -204,20 +209,20 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                      level=logging.INFO)
 
 #Adding handlers
-dispatcher.add_handler(startHandler)
-dispatcher.add_handler(helpHandler)  
-dispatcher.add_handler(openHandler)  
-dispatcher.add_handler(toggleHandler)
-dispatcher.add_handler(photoHandler)
-dispatcher.add_handler(infoHandler)
-dispatcher.add_handler(removemenuHandler)  
-dispatcher.add_handler(sendmenuHandler)  
-dispatcher.add_handler(genttsHandler)
-dispatcher.add_handler(removettsHandler)
-dispatcher.add_handler(btnOpenHandler)
-dispatcher.add_handler(btnToggleHandler)
-dispatcher.add_handler(btnPhotoHandler)
-dispatcher.add_handler(voiceNoteHandler)
-dispatcher.add_handler(allMsgHandler)
+dispatcher.add_handler(start_handler)
+dispatcher.add_handler(help_handler)  
+dispatcher.add_handler(open_handler)  
+dispatcher.add_handler(toggle_handler)
+dispatcher.add_handler(photo_handler)
+dispatcher.add_handler(info_handler)
+dispatcher.add_handler(remove_menu_handler)  
+dispatcher.add_handler(send_menu_handler)  
+dispatcher.add_handler(gentts_handler)
+dispatcher.add_handler(removetts_handler)
+dispatcher.add_handler(btn_open_handler)
+dispatcher.add_handler(btn_toggle_handler)
+dispatcher.add_handler(btn_photo_handler)
+dispatcher.add_handler(voice_note_handler)
+dispatcher.add_handler(all_msg_handler)
 
 updater.start_polling()
