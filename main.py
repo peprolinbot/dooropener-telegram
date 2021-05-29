@@ -16,8 +16,6 @@ from time import sleep
 from pydub import AudioSegment
 from gtts import gTTS
 
-import telegram_helpers
-
 #Instantiates a door
 from door import Door
 main_door = Door(gpio_pin, lock_file_path, wait_to_close_time, btn_press_time)
