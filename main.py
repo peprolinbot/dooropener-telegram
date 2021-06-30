@@ -8,13 +8,23 @@ from telegram.ext import Filters
 from telegram import KeyboardButton
 from telegram import ReplyKeyboardMarkup
 from telegram import ReplyKeyboardRemove
-from config.telegram import *
-from config.language import *
-from config.gpio import *
-from config.variables import *
 from time import sleep
 from pydub import AudioSegment
 from gtts import gTTS
+import json
+
+#Loads config
+with open("config.json") as f:
+    data = json.load(f)
+    token = data["telegram_bot_token"]
+    log_channel_id = data["telegram_log_channel_id"]
+    key_channel_id = data["telegram_key_channel_id"]
+    lang = data["language"]
+    gpio_pin = data["relay_gpio_pin"]
+    btn_press_time = data["button_press_time"]
+    wait_to_close_time = data["wait_to_close_time"]
+    bot_name = data["telegram_bot_name"]
+    lock_file_path = data["lock_file_path"]
 
 #Instantiates a door
 from door import Door

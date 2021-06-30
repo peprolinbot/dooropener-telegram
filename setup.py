@@ -1,3 +1,4 @@
+import json
 import os
 
 approved = False
@@ -86,26 +87,26 @@ try:
             approved = True
         else:
             approved = False
-    print("[i] Creating config dir if it doesn't exist...")
-    if not os.path.isdir('./config'):
-        os.mkdir("config")
-    print("[i] Creating config files...")
-    #Writing content to the files
-    with open("config/telegram.py", "w") as f:
-        f.write('#The telegram bot token that you obtained from @BotFather\ntoken = "'+ token +'"\n\n#Channel where all the events will be logged\nlog_channel_id = "'+ log_channel_id +'"\n\n#Channel in which it\'s members should be able to use the bot\nkey_channel_id = "'+ key_channel_id +'"')
-        f.close()
-    with open("config/language.py", "w") as f:
-        f.write('#Language selection. Can be "es" or "eng".\nlang = "'+ lang +'"')
-        f.close()
-    with open("config/gpio.py", "w") as f:
-        f.write('#Number of the gpio where the relay is connected.\ngpio_pin = '+ gpio_pin)
-        f.close()
-    with open("config/variables.py", "w") as f:
-        f.write('#The name of your bot. It\'ll be used for presenting itself\nbot_name = "' + bot_name + '"\n#Time(in seconds) the relay should be open when simulating a button pressing on your remote.(Recommended and default: 0.5).\nbtn_press_time = '+ btn_press_time +'\n#Time(in seconds) the door should wait before closing itself when using /open command.(Recommended and default: 60).\nwait_to_close_time = '+ wait_to_close_time + '\n#Path where the lockFile should be created and checked for existance. Be sure to have the neccesary permissions.\nlock_file_path = "' + lock_file_path + '"')
-        f.close()
+
+    print("[i] Creating config file...")
+    data = {
+        "telegram_bot_token": token,
+        "telegram_log_channel_id": int(log_channel_id),
+        "telegram_key_channel_id": int(key_channel_id),
+        "telegram_bot_name": bot_name,
+        "language": lang,
+        "relay_gpio_pin": int(gpio_pin),
+        "button_press_time": float(btn_press_time),
+        "wait_to_close_time": float(wait_to_close_time),
+        "lock_file_path": lock_file_path
+    }
+    with open("config.json", "w") as f:
+        json.dump(data, f)
+
     print("[i] Creating audios dir if it doesn't exist...")
     if not os.path.isdir('./audios'):
         os.mkdir("audios")
+    
     print("[i] Succesfull!")
     print("[i] Keep in mind that all this variables can be changed whenever you want at config/telegram.py and config/language.py.")
     print("[i] Bye!")
