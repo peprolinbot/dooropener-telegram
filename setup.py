@@ -108,7 +108,7 @@ try:
         os.mkdir("audios")
     
     print("[i] Succesfull!")
-    print("[i] Keep in mind that all this variables can be changed whenever you want at config/telegram.py and config/language.py.")
+    print("[i] Keep in mind that all this variables can be changed whenever you want at config.json.")
     print("[i] Bye!")
 
 except Exception as e:
