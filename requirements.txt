@@ -8,6 +8,7 @@ importlib-metadata==4.3.1
 numpy==1.16.2
 pydub==0.25.1
 pygame==1.9.4.post1
+pyOpenSSL==20.0.1
 python-telegram-bot==13.5
 pytz==2021.1
 requests==2.25.1
