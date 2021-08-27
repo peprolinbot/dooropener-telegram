@@ -87,7 +87,6 @@ def _log_command(from_chat, cmd, destination_chat_id=log_channel_id): #Logs to t
     out = _check_key(from_chat.id)
     if out:
         bot.send_photo(chat_id=destination_chat_id, photo = open("doorPhoto.jpg", "rb"), caption=cmd + _(": First name: ")+ str(from_chat.first_name) +_(", Last name: ") + str(from_chat.last_name) +_(", chatId: ") + str(from_chat.id) + _("chatIdInChannel"))  
-        _send_menu(from_chat.id)
     else:
         bot.send_photo(chat_id=destination_chat_id, photo = "doorPhoto.jpg", caption=cmd + _(": Type: ")+ str(from_chat.type)+ _(", First name: ")+ str(from_chat.first_name) +_(", Last name: ") + str(from_chat.last_name) + _(", Username: ") + str(from_chat.username) + _(", Title: ") + str(from_chat.title) + _(", Description: ") + str(from_chat.description) + _(", chatId: ") + str(from_chat.id) + _("chatIdNotInChannel"))
     return out
