@@ -1,6 +1,6 @@
 import requests
 
-from config import dumbdoorapi_base_url, dumbdoorapi_token, door_id, wait_to_close_time
+from config import doordumbapi_base_url, doordumbapi_token, door_id, wait_to_close_time
 
 
 class DoorException(Exception):
