@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-8-9 16:52+0200\n"
+"PO-Revision-Date: 2024-8-22 21:52+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: ENGLISH\n"
 "MIME-Version: 1.0\n"
@@ -66,11 +66,8 @@ msgstr "Hi, I'm "
 msgid "useHelp"
 msgstr ". Send /help to see avaliable commands."
 
-msgid "helpCmdListP1"
-msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after "
-
-msgid "helpCmdListP2"
-msgstr " seconds since you sent the command(It'll do the opposite thing if it's already open).\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/photo - Takes a photo of the door and uploads it to this chat.\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed.\n/gentts - Generates an TTS(Text To Speech) audio of welcome with your telegram's name that will play every time you open the door. This is already generated with /start.\n/removetts - Removes your welcome TTS audio.\n/start - The command executed the first time you use the bot.\n/help - This command.\n/info - Tells you about the bot."
+msgid "helpCmdList"
+msgstr "This is a list of avaliable commands:\n/open - Opens the door and closes it automatically after some seconds since you sent the command(It'll do the opposite thing if it's already open).\n/toggle - Just opens/closes the door depending on it's actual state(presses the button one time and forgets about everything).\n/sendmenu - Sends you a menu for the keyboard with the most useful commands for the door. Doesn't do anything if you already have one.\n/removemenu - Removes the actions menu from your keyboard. Doesn't do anything if already removed.\n/start - The command executed the first time you use the bot.\n/help - This command.\n/info - Tells you about the bot."
 
 msgid "openingDoor"
 msgstr "Opening door... It'll close in "
@@ -102,11 +99,5 @@ msgstr "This bot is made by @peprolinbot and it's code is open-source and can be
 msgid "anywaysCheckThisInfo"
 msgstr "Anyways check the following info about the bot:"
 
-msgid "welcome"
-msgstr "Welcome"
-
-msgid "ttsGenerated"
-msgstr "TTS welcome audio generated succesfully."
-
-msgid "ttsRemoved"
-msgstr "Your welcome audio file was removed succesfully."
+msgid "doorGenericError"
+msgstr "There was an error while opening the door. Check the logs or tell the admin."

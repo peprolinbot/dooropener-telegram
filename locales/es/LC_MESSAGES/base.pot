@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2020-07-10 20:40+0200\n"
-"PO-Revision-Date: 2020-8-9 16:52+0200\n"
+"PO-Revision-Date: 2024-8-22 21:52+0200\n"
 "Last-Translator: Pedro Rey Anca <peprolinbot@peprolinbot.com>\n"
 "Language-Team: SPANISH\n"
 "MIME-Version: 1.0\n"
@@ -65,11 +65,8 @@ msgstr "Hola, soy "
 msgid "useHelp"
 msgstr ". Usa /help para ver los comandos disponibles."
 
-msgid "helpCmdListP1"
-msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de "
-
-msgid "helpCmdListP2"
-msgstr " segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/photo - Saca una foto de la puerta y la manda a este chat.\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/gentts - Genera un audio TTS(texto a voz) dándote la bienvenida co tu nombre de telegram, se oirá cada vez que habras la puerta. Ya ha sido generado con /start.\n/removetts - Removes your tts welcome audio.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando.\n/info - Te habla sobre el bot."
+msgid "helpCmdList"
+msgstr "Esta es la lista de comados disponibles:\n/open - Abre la puerta y la cierra automáticamente al cabo de unos segundos desde que mandaste el comando(Hará lo contrario si ya está abierta).\n/toggle - Abre/ciera la puerta dependiendo de su estado actual(pulsa el botón una única vez).\n/sendmenu - Te envía un menú para el teclado con los comandos más útiles. No hace nada si ya tienes uno.\n/removemenu - Te quita el menú del teclado. No hace nada si ya no tienes ninguno.\n/start - El comando que se ejecuta la primera vez que usas el bot.\n/help - Este comando.\n/info - Te habla sobre el bot."
 
 msgid "openingDoor"
 msgstr "Abriendo puerta... Se cerrará en "
@@ -86,12 +83,6 @@ msgstr "Ok, borrando el menu del teclado. Usa /sendmenu si lo quieres más tarde
 msgid "."
 msgstr "."
 
-msgid "photo"
-msgstr "Foto"
-
-msgid "voiceNote"
-msgstr "nota de voz"
-
 msgid "doorAlreadyOpening"
 msgstr "La puerta ya se está abriendo, espera a que se cierre antes de intentar abrirla otra vez"
 
@@ -101,11 +92,5 @@ msgstr "Este bot ha sido progaramado por @peprolinbot y su código fuente, que e
 msgid "anywaysCheckThisInfo"
 msgstr "De todas maneras mira esta iformación sobre el bot."
 
-msgid "welcome"
-msgstr "Bienvenido"
-
-msgid "ttsGenerated"
-msgstr "Audio de bienvenida TTS generado con éxito"
-
-msgid "ttsRemoved"
-msgstr "Tu audio de bienvenida ha sido eliminado con éxito."
+msgid "doorGenericError"
+msgstr "Hubo un error inesperado al intentar abrir la puerta. Mira los logs o comunícaselo al administrador."
