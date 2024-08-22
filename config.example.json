@@ -1,0 +1,17 @@
+{
+    "config": {
+        "telegram": {
+            "bot_token": "123456:ABCDEFGHIverysecuretoken",
+            "log_channel_id": -123456,
+            "key_channel_id": -654321,
+            "bot_name": "Garage Door",
+            "language": "es"
+        },
+        "door-dumb-api": {
+            "base_url": "http://arespi.local:8080",
+            "token": "thisisaverysecuretoken",
+            "door_id": "garageDoor",
+            "wait_to_close_time": 60
+        }
+    }
+}
