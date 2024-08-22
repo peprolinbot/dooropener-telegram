@@ -1,13 +1,52 @@
 # dooropener-telegram
-Open your door with a telegram bot. This is programmed in python3. And it's avaliable in english and spanish.
+A client for [door-dumb-api](https://codeberg.org/peprolinbot/door-dumb-api) that allows to use a Telegram bot to simply open the door. The bot used to do a few more things (check the `old` branch if interested), but if you want anything more advanced, you should check [Home assistant](https://www.home-assistant.io/) as this is meant to be extremly simple (I run it at my grandparents' country house, where there are limited resources).
 
-## HW Setup
-You need a Raspberry pi with a Picamera, a speaker, and a relay connected to the button in the remote of yor door. Just that. Write down the number of the GPIO pin where you put the relay.
+## 🔧 Deploy it 
 
-## SW Setup
-You need three things from telgram: A bot and two channels, one is used for logging the events and the other for adding the persons that should be able to use the bot, you need the chatId from both channels. Now clone this repo. Then run the setup.py script and answer it's questions. For executing the bot run main.py
+###  🐳 With Docker (Recommended)
 
-## Using
-You can change whatever you want if you have a little knowdeledge on python, but as default this is very simple: `/open` will open the door for 60s and close it, and the opposite if it's closed; `/toggle` will open or close it, depending on it's actual state, but just that, no automagically closing.
+This is quick, easy and simple (if everything is going to be on a Pi, you should make yourself a `docker-compose.yml`):
 
-### This short documentation will be better in future. You can help if you want ;)
+1. First, you need a [door-dumb-api](https://codeberg.org/peprolinbot/door-dumb-api) instance. Check that README to learn how to spin one up
+
+2. Then, you can setup the basic configuration (check `config.example.json`).
+
+3. Then you can use this docker command:
+```bash
+docker run -d --name dooropener-telegram -v /tmp/config:/app/config ghcr.io/peprolinbot/dooropener-telegram
+```
+
+#### Environment Variables
+
+| Name              | Description                                                                                                         |
+|-------------------|-----------------------------------------------------------------------------|
+| `CONFIG_FILE`     | Path to the json file with the basic config _(Default: "config/config.json")|
+
+#### Configuration values
+- `telegram`
+    - `bot_token`: The token @BotFather gave you
+    - `log_channel_id`: Id of the channel where all the events will be logged
+    - `key_channel_id`: Id of the channel whose members should be able to use the bot
+    - `bot_name`: A name for your bot
+    - `language`: The language code you want the messages to be sent in (es/eng)
+- `door-dumb-api`
+    - `base_url`: The base url of the door-dumb-api instance
+    - `token`: A token for door-dumb-api(check that README)
+    - `door_id`: The door_id that will be controlled by the bot
+    - `wait_to_close_time`: This is **optional**, if specified it will override the value specified for the door in door-dumb-api
+
+#### Build the image
+```bash
+git clone https://github.com/peprolinbot/dooropener-telegram
+cd dooropener-telegram
+docker build -t dooropener-telegram .
+```
+
+### 💪🏻 Without Docker
+Only use this for development unless you know what you're doing.
+
+```bash
+git clone https://github.com/peprolinbot/dooropener-telegram
+cd dooropener-telegram
+python3 main.py
+```
