@@ -8,10 +8,10 @@ class DoorException(Exception):
 
 
 def _api_get(endpoint, params={}):
-    r = requests.get(f"{dumbdoorapi_base_url}{endpoint}",
+    r = requests.get(f"{doordumbapi_base_url}{endpoint}",
                      params=params,
                      headers={
-                         "x-access-token": dumbdoorapi_token
+                         "x-access-token": doordumbapi_token
                      },
                      )
     if r.status_code == 200:
