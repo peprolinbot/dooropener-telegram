@@ -1,6 +1,9 @@
 # dooropener-telegram
 A client for [door-dumb-api](https://codeberg.org/peprolinbot/door-dumb-api) that allows to use a Telegram bot to simply open the door. The bot used to do a few more things (check the `old` branch if interested), but if you want anything more advanced, you should check [Home assistant](https://www.home-assistant.io/) as this is meant to be extremly simple (I run it at my grandparents' country house, where there are limited resources).
 
+## ⚠️ DEPRECATION NOTICE
+I no longer used this (altough it should still work, but keep in mind this was developed when I was 13 and poorly patched over the years) and therefore i will not update it (I seriously doubt anyone would want to use this, but feel free to fork). My grandparents bought a new door opener and now there is  fiber at the house, so **we now use** Home Assistant and [tg-ha-door](https://github.com/peprolinbot/tg-ha-door). 
+
 ## 🔧 Deploy it 
 
 ###  🐳 With Docker (Recommended)
